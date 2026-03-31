@@ -1,8 +1,11 @@
 import { Course, Category } from "../models/index.js";
 
-export const home = (req, res) => {
+export const home = async (req, res) => {
   try {
-    res.render("home", {});
+    const courses = await Course.findAll({ raw: true });
+    res.render("home", {
+        courses
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error al cargar el Servidor", error);
@@ -35,7 +38,10 @@ export const createCategory = async (req, res) => {
 //3. Mostrar el formulario de cursos
 export const getCreateCourseForm = async (req, res) => {
   try {
-    res.render("formCourse");
+    const categories = await Category.findAll({ raw: true });
+    res.render("formCourse", {
+      categories,
+    });
   } catch (error) {
     console.error("Error al cargar formulario:", error);
     res.status(500).send("Error interno");

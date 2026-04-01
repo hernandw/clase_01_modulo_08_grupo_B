@@ -4,7 +4,7 @@ export const home = async (req, res) => {
   try {
     const courses = await Course.findAll({ raw: true });
     res.render("home", {
-        courses
+      courses,
     });
   } catch (error) {
     console.log(error);
@@ -58,5 +58,19 @@ export const createCourse = async (req, res) => {
   } catch (error) {
     console.error("Error al crear categoria:", error);
     res.status(500).send("Error al guardar categoria");
+  }
+};
+
+//5. Eliminar los cursos
+
+export const deleteCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Course.destroy({where: {id}})
+    res.redirect('/')
+    
+  } catch (error) {
+    console.error("Error al eliminar", error);
+    res.status(500).send("Error al eliminar el curso");
   }
 };

@@ -1,12 +1,22 @@
-import { Sequelize } from "sequelize";
+import pg from 'pg'
 import 'dotenv/config'
+const { Pool } = pg
 
-const {DB_USER, DB_DATABASE, DB_PASSWORD, DB_HOST, DIALECT} = process.env
+const {DB_USER, DB_DATABASE, DB_PASSWORD, DB_HOST, DB_PORT} = process.env
 
-const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
+const pool = new Pool({
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_DATABASE,
     host: DB_HOST,
-    dialect: DIALECT,
-    logging: false
+    port: DB_PORT,
+    allowExitOnIdle: true
 })
 
-export default sequelize
+/* const getDate = async()=>{
+    const { rows} = await pool.query("select NOW()")
+    console.log(rows[0])
+}
+
+getDate() */
+export default pool

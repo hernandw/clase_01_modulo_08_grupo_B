@@ -1,8 +1,9 @@
-import { Course, Category } from "../models/index.js";
+import { Course, Category } from "../models/courseModel.js";
 
 export const home = async (req, res) => {
   try {
     const courses = await Course.findAll({ raw: true });
+    console.log(courses)
     res.render("home", {
       courses,
     });
@@ -27,7 +28,7 @@ export const getCreateCategoryForm = async (req, res) => {
 export const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
-    await Category.create({ name });
+    await Category.create( name );
     res.redirect("/create"); //vuelve a la página de crear curso
   } catch (error) {
     console.error("Error al crear categoria:", error);
@@ -52,8 +53,8 @@ export const getCreateCourseForm = async (req, res) => {
 
 export const createCourse = async (req, res) => {
   try {
-    const { title, description, price, categoryID } = req.body;
-    await Course.create({ title, description, price, categoryID });
+    const { title, description, price, category_id } = req.body;
+    await Course.create( title, description, price, category_id );
     res.redirect("/"); //vuelve a la página principal
   } catch (error) {
     console.error("Error al crear categoria:", error);
@@ -106,25 +107,25 @@ export const updateCourse = async (req, res) => {
       { title, description, price, categoryId },
       { where: { id } },
     );
-    res.redirect('/')
+    res.redirect("/");
   } catch (error) {
-    console.error("error al actualizar curso", error)
-    res.status(500).render('Error',{
-      message: 'Error para guardar los datos'
-    })
+    console.error("error al actualizar curso", error);
+    res.status(500).render("Error", {
+      message: "Error para guardar los datos",
+    });
   }
 };
 
-export const getCategory = async(req, res)=>{
+export const getCategory = async (req, res) => {
   try {
-     const categories = await Category.findAll({ raw: true });
-    res.render('category',{
-      categories
-    })
+    const categories = await Category.findAll({ raw: true });
+    res.render("category", {
+      categories,
+    });
   } catch (error) {
-    console.error("error al mostrar categorias", error)
-    res.render('error',{
-      message: "Error al mostrar categorias"
-    })
+    console.error("error al mostrar categorias", error);
+    res.render("error", {
+      message: "Error al mostrar categorias",
+    });
   }
-}
+};
